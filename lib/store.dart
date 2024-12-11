@@ -934,7 +934,7 @@ class _StoreState extends State<Store> {
         return CarouselSlider.builder(
           options: CarouselOptions(
             initialPage: initialIndex,
-            height: 450, // Adjust height for proper layout
+            height: 450, 
             enableInfiniteScroll: true,
             enlargeCenterPage: false,
             autoPlay: false,
@@ -1036,7 +1036,7 @@ class _StoreState extends State<Store> {
         return CarouselSlider.builder(
           options: CarouselOptions(
             initialPage: initialIndex,
-            height: 470, // Adjust height for proper layout
+            height: 470, 
             enableInfiniteScroll: true,
             enlargeCenterPage: false,
             autoPlay: false,

@@ -25,15 +25,15 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Map<String, dynamic>> favoriteCombinations = [
     {
-      'icon': Icons.favorite,
+      'image': 'assets/store.jpeg',
       'title': "Combination 1",
       'description':
-          "Plant instantly with custom combinations of trees for different occasions.",
+          "Perfect for nature lovers. Plant and nurture trees easily.",
       'price': "Unlock ₹330.00",
       'discount': "Now 15% off! (Regular Price: ₹390.00)",
     },
     {
-      'icon': Icons.park,
+      'image': 'assets/store.jpeg',
       'title': "Combination 2",
       'description':
           "Perfect for nature lovers. Plant and nurture trees easily.",
@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
       'discount': "Special offer: 10% off!",
     },
     {
-      'icon': Icons.settings,
+      'image': 'assets/store.jpeg',
       'title': "Combination 3",
       'description': "Customizable options for your favorite plantations.",
       'price': "Unlock ₹500.00",
@@ -384,8 +384,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   ),
                                   "My Favorite": GestureDetector(
                                     onTap: () {
-                                      showScrollableFavoriteDialog(context,
-                                          4); 
+                                      showScrollableFavoriteDialog(context);
                                     },
                                     child: Text(
                                       "My Favorite",
@@ -815,86 +814,107 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void showScrollableFavoriteDialog(BuildContext context, int initialIndex) {
+  void showScrollableFavoriteDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
-          ),
-          child: Expanded(
-            child: CarouselSlider.builder(
-              itemCount: favoriteCombinations.length,
-              itemBuilder: (context, index, realIndex) {
-                final combination = favoriteCombinations[index];
-                return _buildFavoriteCard(
-                  icon: combination['icon'] as IconData,
-                  title: combination['title'] as String,
-                  description: combination['description'] as String,
-                  price: combination['price'] as String,
-                  discount: combination['discount'] as String,
-                );
-              },
-              options: CarouselOptions(
-                enlargeCenterPage: true,
-                enableInfiniteScroll: true,
-                autoPlay: false,
-                viewportFraction: 0.8,
-                initialPage: initialIndex,
-                height: 470,
-              ),
-            ),
+        return CarouselSlider.builder(
+          itemCount: favoriteCombinations.length,
+          itemBuilder: (context, index, realIndex) {
+            final combination = favoriteCombinations[index];
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  margin: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                  ),
+                  child: Column(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          combination['image'],
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        combination['title'] ?? '',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          combination['description'] ?? '',
+                          style: TextStyle(fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      SizedBox(height: 50),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF8cc914),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        combination['price'],
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(5)),
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 8, top: 4, bottom: 4),
+                    child: Text(
+                      combination['discount'] ?? '',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+          options: CarouselOptions(
+            enlargeCenterPage: false,
+            enableInfiniteScroll: false,
+            autoPlay: false,
+            height: 500,
           ),
         );
       },
-    );
-  }
-
-  Widget _buildFavoriteCard({
-    required IconData icon,
-    required String title,
-    required String description,
-    required String price,
-    required String discount,
-  }) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: 50, color: Colors.green),
-        SizedBox(height: 10),
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 10),
-        Text(
-          description,
-          style: TextStyle(fontSize: 14),
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 20),
-        Text(
-          price,
-          style: TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.bold,
-            color: Colors.green,
-          ),
-        ),
-        SizedBox(height: 5),
-        Text(
-          discount,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey,
-          ),
-        ),
-      ],
     );
   }
 }
