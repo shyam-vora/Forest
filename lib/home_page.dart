@@ -77,22 +77,65 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
         actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(20),
+          Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                padding: EdgeInsets.only(top: 1, bottom: 1, left: 15),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomRight: Radius.circular(10)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Text(
+                      '300',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 2),
+                    Icon(
+                      Icons.add,
+                      size: 20,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
-              child: Row(
-                children: const [
-                  Icon(Icons.add, color: Colors.white, size: 20),
-                  SizedBox(width: 10),
-                  Icon(Icons.settings, color: Colors.white, size: 20),
-                ],
+              Positioned(
+                top: 7,
+                left: -80,
+                right: 0,
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.yellow.shade700,
+                      shape: BoxShape.circle,
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Colors.black26,
+                      //     blurRadius: 4,
+                      //     offset: Offset(2, 2),
+                      //   ),
+                      // ],
+                    ),
+                    child: Icon(
+                      Icons.monetization_on,
+                      size: 15,
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
