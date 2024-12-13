@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:untitled/newsinfo.dart';
+import 'package:untitled/News/newsinfo.dart';
 
 class News extends StatefulWidget {
   const News({super.key});

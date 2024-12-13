@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:untitled/manage_friend_list.dart';
+import 'package:untitled/Friends/manage_friend_list.dart';
 
 class Friend extends StatefulWidget {
   const Friend({Key? key}) : super(key: key);

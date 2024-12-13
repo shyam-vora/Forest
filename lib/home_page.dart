@@ -6,11 +6,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:untitled/achievents.dart';
 import 'package:untitled/forest.dart';
-import 'package:untitled/frineds.dart';
-import 'package:untitled/news.dart';
+import 'package:untitled/Friends/frineds.dart';
+import 'package:untitled/News/news.dart';
 import 'package:untitled/realforest.dart';
 import 'package:untitled/setting.dart';
-import 'package:untitled/store.dart';
+import 'package:untitled/Store/store.dart';
 import 'package:untitled/tages.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -62,17 +62,23 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: const Color(0xFF50A387),
         centerTitle: true,
         title: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: Colors.black.withOpacity(0.1),
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
-            children: const [
-              Icon(Icons.hourglass_top, color: Colors.white, size: 20),
+            children: [
+              const Icon(Icons.hourglass_top, color: Colors.white, size: 20),
               SizedBox(width: 10),
-              Icon(Icons.grass, color: Colors.white, size: 20),
+              Container(
+                width: 1,
+                height: 18,
+                color: Colors.white,
+              ),
+              SizedBox(width: 10),
+              const Icon(Icons.grass, color: Colors.white, size: 20),
             ],
           ),
         ),
@@ -82,12 +88,12 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               Container(
                 margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                padding: EdgeInsets.only(top: 1, bottom: 1, left: 15),
+                padding: EdgeInsets.only(top: 2, bottom: 2, left: 18, right: 5),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.2),
                   borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(10),
-                      bottomRight: Radius.circular(10)),
+                      topRight: Radius.circular(20),
+                      bottomRight: Radius.circular(20)),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -100,17 +106,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 2),
+                    SizedBox(width: 5),
                     Icon(
-                      Icons.add,
+                      color: Color(0xFFa6dc3e),
+                      Icons.add_box_sharp,
                       size: 20,
-                      color: Colors.white,
                     ),
                   ],
                 ),
               ),
               Positioned(
-                top: 7,
+                top: 8.5,
                 left: -80,
                 right: 0,
                 child: Center(
@@ -331,15 +337,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   onChange: (value) {
                     setState(() {
                       _sliderValue = value;
-                      Min = (value ~/ 60); // Total minutes
-                      Second = (value % 60).toInt(); // total seconds
+                      Min = (value ~/ 60);
+                      Second = (value % 60).toInt();
                     });
                   },
                   max: 7200,
                   min: 600,
                   initialValue: _sliderValue,
                   appearance: CircularSliderAppearance(
-                    startAngle: 270,
+                    startAngle: 250,
                     angleRange: 360,
                     size: 220,
                     animationEnabled: true,
@@ -355,10 +361,11 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
+                  // borderRadius: BorderRadius.circular(300),
                   child: Image.network(
                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2C6w_qnDXYxytw84PfcKU1XT0Ard7TwrHLA&s ',
                     // color: Color(0xFFe4e5a3),
-                    width: 200,
+                    width: 135,
                   ),
                 ),
               ],
@@ -379,7 +386,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white.withOpacity(0.4),
+                backgroundColor: Colors.black.withOpacity(0.0),
                 padding: const EdgeInsets.symmetric(horizontal: 20),
               ),
             ),
@@ -742,6 +749,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                     ),
+                                    
                                     SizedBox(
                                       height: 20,
                                     ),
