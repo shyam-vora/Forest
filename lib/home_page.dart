@@ -14,6 +14,7 @@ import 'package:untitled/Store/store.dart';
 import 'package:untitled/tages.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'dart:async';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -53,6 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
   int Min = 10;
   int Second = 0;
   String selectedSegment = "Planting Setting";
+  String? selectedTag;
+  Timer? _timer;
+  bool isTimerRunning = false;
 
   @override
   Widget build(BuildContext context) {
@@ -67,81 +71,550 @@ class _MyHomePageState extends State<MyHomePage> {
             color: Colors.black.withOpacity(0.1),
             borderRadius: BorderRadius.circular(20),
           ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.hourglass_top, color: Colors.white, size: 20),
-              SizedBox(width: 10),
-              Container(
-                width: 1,
-                height: 18,
-                color: Colors.white,
-              ),
-              SizedBox(width: 10),
-              const Icon(Icons.grass, color: Colors.white, size: 20),
-            ],
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: StatefulBuilder(
+                      builder: (context, setState) {
+                        String selectedSegments = 'Timer';
+                        return Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              height: 60,
+                              width: double.infinity,
+                              color: Color(0xFF50A387),
+                              child: CupertinoSlidingSegmentedControl<String>(
+                                backgroundColor: Colors.black.withOpacity(0.1),
+                                thumbColor: Colors.white,
+                                groupValue: selectedSegments,
+                                onValueChanged: (value) {
+                                  setState(() {
+                                    if (value != null) {
+                                      selectedSegments = value;
+                                      print(
+                                          "Selected segment updated to: $selectedSegments");
+                                    }
+                                  });
+                                },
+                                children: {
+                                  "Timer": Text(
+                                    "Timer",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: selectedSegments == "Timer"
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                  "Stopwatch": Text(
+                                    "Stopwatch",
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: selectedSegments == "Stopwatch"
+                                          ? Colors.black
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                            if (selectedSegments == "Timer") ...[
+                              Divider(
+                                  thickness: 1, color: Colors.grey.shade300),
+                              ListTile(
+                                leading: Icon(Icons.local_fire_department,
+                                    color: Color(0xFF1A7739)),
+                                title: Text('Deep focus',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text(
+                                  'You will be guided back if you leave the app. Pro users can set Allow List.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              Divider(
+                                  thickness: 1, color: Colors.grey.shade300),
+                              ListTile(
+                                leading:
+                                    Icon(Icons.group, color: Color(0xFF1A7739)),
+                                title: Text('Plant together',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text(
+                                  'If one fails, all trees wither.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                                trailing: Switch(
+                                  value: false,
+                                  onChanged: (value) {
+                                    // Handle switch toggle
+                                  },
+                                  activeColor: Color(0xFF1A7739),
+                                ),
+                              ),
+                            ] else if (selectedSegments == "Stopwatch") ...[
+                              Divider(
+                                  thickness: 1, color: Colors.grey.shade300),
+                              ListTile(
+                                leading:
+                                    Icon(Icons.timer, color: Color(0xFF1A7739)),
+                                title: Text('Stopwatch mode',
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold)),
+                                subtitle: Text(
+                                  'Track your focus duration precisely.',
+                                  style: TextStyle(fontSize: 12),
+                                ),
+                              ),
+                              Divider(
+                                  thickness: 1, color: Colors.grey.shade300),
+                              // ListTile(
+                              //   leading: Icon(Icons.history,
+                              //       color: Color(0xFF1A7739)),
+                              //   title: Text('Session history',
+                              //       style:
+                              //           TextStyle(fontWeight: FontWeight.bold)),
+                              //   subtitle: Text(
+                              //     'Review your previous focus sessions.',
+                              //     style: TextStyle(fontSize: 12),
+                              //   ),
+                              // ),
+                            ]
+                          ],
+                        );
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.hourglass_top, color: Colors.white, size: 20),
+                SizedBox(width: 10),
+                Container(
+                  width: 1,
+                  height: 18,
+                  color: Colors.white,
+                ),
+                SizedBox(width: 10),
+                const Icon(Icons.grass, color: Colors.white, size: 20),
+              ],
+            ),
           ),
         ),
         actions: [
-          Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                padding: EdgeInsets.only(top: 2, bottom: 2, left: 18, right: 5),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      bottomRight: Radius.circular(20)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      '300',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+          InkWell(
+            onTap: () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      contentPadding: EdgeInsets.all(0.3),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
-                    SizedBox(width: 5),
-                    Icon(
-                      color: Color(0xFFa6dc3e),
-                      Icons.add_box_sharp,
-                      size: 20,
-                    ),
-                  ],
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15)),
+                            child: Image.asset(
+                              'assets/store.jpeg',
+                              fit: BoxFit.fill,
+                              height: 140,
+                              width: 500,
+                            ),
+                          ),
+                          SizedBox(height: 10),
+                          Text(
+                            'Sunshine Exlixir Shop',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10, left: 20, right: 20, bottom: 10),
+                            child: Text(
+                              'When Sunshine Elixir is active, triple coin rewards will be given after planting trees',
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 2,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 12, right: 8),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.1)),
+                                  child: Center(
+                                      child: Icon(
+                                    size: 40,
+                                    Icons.monetization_on,
+                                    color: Colors.amber,
+                                  )),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Bottle of\nSunshine Elixir',
+                                    ),
+                                    Text(
+                                      '1 Week',
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  "Are You Sure to Purchse",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        backgroundColor:
+                                                            Color.fromARGB(255,
+                                                                146, 156, 151),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 20,
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        'Cancle',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {},
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        backgroundColor:
+                                                            Color.fromARGB(255,
+                                                                79, 169, 124),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 20,
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        'Unlock',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.currency_rupee,
+                                    size: 14,
+                                    color: Colors.black,
+                                  ),
+                                  label: Text(
+                                    "90.00",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 12),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.amber,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            height: 3,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: 12, bottom: 10, right: 2),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 60,
+                                  width: 60,
+                                  decoration: BoxDecoration(
+                                      color: Colors.black.withOpacity(0.1)),
+                                  child: Center(
+                                      child: Icon(
+                                    size: 40,
+                                    Icons.monetization_on,
+                                    color: Colors.amber,
+                                  )),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Bottle of\nSunshine Elixir',
+                                    ),
+                                    Text(
+                                      '1 Week',
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  "Are You Sure to Purchse",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        backgroundColor:
+                                                            Color.fromARGB(255,
+                                                                146, 156, 151),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 20,
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        'Cancle',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {},
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        backgroundColor:
+                                                            Color.fromARGB(255,
+                                                                79, 169, 124),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                          horizontal: 20,
+                                                        ),
+                                                      ),
+                                                      child: const Text(
+                                                        'Unlock',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        });
+                                  },
+                                  icon: Icon(
+                                    Icons.currency_rupee,
+                                    size: 14,
+                                    color: Colors.black,
+                                  ),
+                                  label: Text(
+                                    "180.00",
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 12),
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.amber,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  });
+            },
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  padding:
+                      EdgeInsets.only(top: 2, bottom: 2, left: 18, right: 5),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.2),
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(20),
+                        bottomRight: Radius.circular(20)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        '300',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 5),
+                      Icon(
+                        color: Color(0xFFa6dc3e),
+                        Icons.add_box_sharp,
+                        size: 20,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Positioned(
-                top: 8.5,
-                left: -80,
-                right: 0,
-                child: Center(
-                  child: Container(
-                    padding: EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow.shade700,
-                      shape: BoxShape.circle,
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.black26,
-                      //     blurRadius: 4,
-                      //     offset: Offset(2, 2),
-                      //   ),
-                      // ],
-                    ),
-                    child: Icon(
-                      Icons.monetization_on,
-                      size: 15,
-                      color: const Color.fromARGB(255, 255, 255, 255),
+                Positioned(
+                  top: 8.5,
+                  left: -80,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: Colors.yellow.shade700,
+                        shape: BoxShape.circle,
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.black26,
+                        //     blurRadius: 4,
+                        //     offset: Offset(2, 2),
+                        //   ),
+                        // ],
+                      ),
+                      child: Icon(
+                        Icons.monetization_on,
+                        size: 15,
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
@@ -371,23 +844,28 @@ class _MyHomePageState extends State<MyHomePage> {
               ],
             ),
             const SizedBox(height: 22),
-            ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.add,
-                size: 24,
-                color: Colors.white,
-              ),
-              label: Text(
-                "Unset",
-                style: GoogleFonts.nunito(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black.withOpacity(0.0),
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+            Container(
+              height: 30,
+              width: 90,
+              decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    size: 15,
+                    Icons.edit,
+                    color: Colors.white,
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    '$selectedTag',
+                    style: TextStyle(fontSize: 18, color: Colors.white),
+                  ),
+                ],
               ),
             ),
             GestureDetector(
@@ -589,156 +1067,266 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     Axis.horizontal,
                                                 child: Row(
                                                   children: [
-                                                    Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                        horizontal: 4,
-                                                      ),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius:
-                                                                4, // Small dot
-                                                            backgroundColor:
-                                                                Colors.orange,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text('Work'),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 4),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius: 4,
-                                                            backgroundColor:
-                                                                Colors.blue,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text('Social'),
-                                                        ],
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedTag = 'Work';
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 3),
+                                                        decoration: BoxDecoration(
+                                                            color: selectedTag ==
+                                                                    'Work'
+                                                                ? Colors.white
+                                                                : Colors.black
+                                                                    .withOpacity(
+                                                                        0.1),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8)),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            CircleAvatar(
+                                                              radius: 4,
+                                                              backgroundColor:
+                                                                  Colors.orange,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              'Work',
+                                                              style: TextStyle(
+                                                                fontWeight:
+                                                                    selectedTag ==
+                                                                            'Work'
+                                                                        ? FontWeight
+                                                                            .bold
+                                                                        : null,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                    Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 4),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius: 4,
-                                                            backgroundColor:
-                                                                Colors.green,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text('Study'),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 4),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius: 4,
-                                                            backgroundColor:
-                                                                Colors.red,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text('Relax'),
-                                                        ],
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedTag =
+                                                              'Social';
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 3),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: selectedTag ==
+                                                                  'Social'
+                                                              ? Colors.white
+                                                              : Colors.black
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            CircleAvatar(
+                                                              radius: 4,
+                                                              backgroundColor:
+                                                                  Colors.blue,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              'Social',
+                                                              style: TextStyle(
+                                                                fontWeight: selectedTag ==
+                                                                        'Social'
+                                                                    ? FontWeight
+                                                                        .bold
+                                                                    : null,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
-                                                    Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 4),
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 8,
-                                                          vertical: 3),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedTag = 'Study';
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 3),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: selectedTag ==
+                                                                  'Study'
+                                                              ? Colors.white
+                                                              : Colors.black
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            CircleAvatar(
+                                                              radius: 4,
+                                                              backgroundColor:
+                                                                  Colors.green,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              'Study',
+                                                              style: TextStyle(
+                                                                fontWeight: selectedTag ==
+                                                                        'Study'
+                                                                    ? FontWeight
+                                                                        .bold
+                                                                    : null,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
                                                       ),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          CircleAvatar(
-                                                            radius: 4,
-                                                            backgroundColor:
-                                                                Colors.purple,
-                                                          ),
-                                                          const SizedBox(
-                                                              width: 4),
-                                                          Text('Fitness'),
-                                                        ],
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedTag = 'Relax';
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 3),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: selectedTag ==
+                                                                  'Relax'
+                                                              ? Colors.white
+                                                              : Colors.black
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            CircleAvatar(
+                                                              radius: 4,
+                                                              backgroundColor:
+                                                                  Colors.red,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              'Relax',
+                                                              style: TextStyle(
+                                                                fontWeight: selectedTag ==
+                                                                        'Relax'
+                                                                    ? FontWeight
+                                                                        .bold
+                                                                    : null,
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          selectedTag =
+                                                              'Fitness';
+                                                        });
+                                                      },
+                                                      child: Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 4),
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 3),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: selectedTag ==
+                                                                  'Fitness'
+                                                              ? Colors.white
+                                                              : Colors.black
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            CircleAvatar(
+                                                              radius: 4,
+                                                              backgroundColor:
+                                                                  Colors.purple,
+                                                            ),
+                                                            const SizedBox(
+                                                                width: 4),
+                                                            Text(
+                                                              'Fitnes',
+                                                              style: TextStyle(
+                                                                fontWeight: selectedTag ==
+                                                                        'Fitness'
+                                                                    ? FontWeight
+                                                                        .bold
+                                                                    : null,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -749,7 +1337,6 @@ class _MyHomePageState extends State<MyHomePage> {
                                         ),
                                       ),
                                     ),
-                                    
                                     SizedBox(
                                       height: 20,
                                     ),
@@ -801,21 +1388,57 @@ class _MyHomePageState extends State<MyHomePage> {
                                             SizedBox(
                                               width: 75,
                                             ),
-                                            ElevatedButton(
-                                              onPressed: () {},
-                                              style: ElevatedButton.styleFrom(
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(8),
-                                                ),
-                                                backgroundColor:
-                                                    const Color(0xFF67D1AD),
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 40),
-                                              ),
+                                            ElevatedButton( 
+                                              onPressed: () {
+                                                setState(() {
+                                                  if (isTimerRunning){
+                                                    _timer?.cancel();
+                                                    isTimerRunning = false;
+                                                  } else {
+                                                    startCountdown();
+                                                    isTimerRunning = true;
+
+                                                  }
+                                                });
+                                              },
+                                              style: isTimerRunning
+                                                  ? ElevatedButton.styleFrom(
+                                                      backgroundColor: Colors
+                                                          .transparent
+                                                          .withOpacity(0.0),
+                                                      side: BorderSide(
+                                                          color: Colors.white),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 30,
+                                                              right: 30,
+                                                              top: 0,
+                                                              bottom: 0),
+                                                    )
+                                                  : ElevatedButton.styleFrom(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8),
+                                                      ),
+                                                      backgroundColor:
+                                                          const Color(
+                                                              0xFF67D1AD),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 40),
+                                                    ),
                                               child: Text(
-                                                'Plant',
+                                                isTimerRunning
+                                                    ? 'Cancel'
+                                                    : 'Plant',
                                                 style: GoogleFonts.nunito(
                                                   color: Colors.white,
                                                   fontSize: 16,
@@ -835,6 +1458,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
               child: Text(
+                // '${Min.toString()}:${Second.toString().padLeft(2, '0')}
                 '${Min.toString()}:${Second.toString().padLeft(2, '0')}',
                 style: GoogleFonts.nunito(
                   fontSize: 90,
@@ -843,16 +1467,36 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                backgroundColor: const Color(0xFF67D1AD),
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-              ),
+              onPressed: () {
+                setState(() {
+                  if (isTimerRunning) {
+                    _timer?.cancel();
+                    isTimerRunning = false;
+                  } else {
+                    startCountdown();
+                    isTimerRunning = true;
+                  }
+                });
+              },
+              style: isTimerRunning
+                  ? ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent.withOpacity(0.0),
+                      side: BorderSide(color: Colors.white),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 0, bottom: 0),
+                    )
+                  : ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      backgroundColor: const Color(0xFF67D1AD),
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                    ),
               child: Text(
-                'Plant',
+                isTimerRunning ? 'Cancel' : 'Plant',
                 style: GoogleFonts.nunito(
                   color: Colors.white,
                   fontSize: 16,
@@ -863,6 +1507,29 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel(); // Cancel the timer if the widget is disposed
+    super.dispose();
+  }
+
+  void startCountdown() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (Second > 0) {
+        setState(() {
+          Second--; // Decrease seconds by 1
+        });
+      } else if (Min > 0) {
+        setState(() {
+          Min--; // If seconds are 0, reduce minutes by 1
+          Second = 59; // Reset seconds to 59
+        });
+      } else {
+        _timer?.cancel(); // Stop the timer when it reaches 0:00
+      }
+    });
   }
 
   void showScrollableFavoriteDialog(BuildContext context) {
