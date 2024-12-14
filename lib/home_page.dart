@@ -792,23 +792,23 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                backgroundColor: const Color(0xFF67D1AD),
-                padding: const EdgeInsets.symmetric(horizontal: 40),
-              ),
-              child: Text(
-                'Plant',
-                style: GoogleFonts.nunito(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {},
+            //   style: ElevatedButton.styleFrom(
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(8),
+            //     ),
+            //     backgroundColor: const Color(0xFF67D1AD),
+            //     padding: const EdgeInsets.symmetric(horizontal: 40),
+            //   ),
+            //   child: Text(
+            //     'Plant',
+            //     style: GoogleFonts.nunito(
+            //       color: Colors.white,
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
