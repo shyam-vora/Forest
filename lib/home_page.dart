@@ -1388,16 +1388,17 @@ class _MyHomePageState extends State<MyHomePage> {
                                             SizedBox(
                                               width: 75,
                                             ),
-                                            ElevatedButton( 
+                                            ElevatedButton(
                                               onPressed: () {
                                                 setState(() {
-                                                  if (isTimerRunning){
+                                                  if (isTimerRunning) {
                                                     _timer?.cancel();
                                                     isTimerRunning = false;
+                                                    Navigator.pop(context);
                                                   } else {
                                                     startCountdown();
                                                     isTimerRunning = true;
-
+                                                    Navigator.pop(context);
                                                   }
                                                 });
                                               },
