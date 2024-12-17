@@ -1467,43 +1467,43 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  if (isTimerRunning) {
-                    _timer?.cancel();
-                    isTimerRunning = false;
-                  } else {
-                    startCountdown();
-                    isTimerRunning = true;
-                  }
-                });
-              },
-              style: isTimerRunning
-                  ? ElevatedButton.styleFrom(
-                      backgroundColor: Colors.transparent.withOpacity(0.0),
-                      side: BorderSide(color: Colors.white),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      padding: const EdgeInsets.only(
-                          left: 30, right: 30, top: 0, bottom: 0),
-                    )
-                  : ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      backgroundColor: const Color(0xFF67D1AD),
-                      padding: const EdgeInsets.symmetric(horizontal: 40),
-                    ),
-              child: Text(
-                isTimerRunning ? 'Cancel' : 'Plant',
-                style: GoogleFonts.nunito(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     setState(() {
+            //       if (isTimerRunning) {
+            //         _timer?.cancel();
+            //         isTimerRunning = false;
+            //       } else {
+            //         startCountdown();
+            //         isTimerRunning = true;
+            //       }
+            //     });
+            //   },
+            //   style: isTimerRunning
+            //       ? ElevatedButton.styleFrom(
+            //           backgroundColor: Colors.transparent.withOpacity(0.0),
+            //           side: BorderSide(color: Colors.white),
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           padding: const EdgeInsets.only(
+            //               left: 30, right: 30, top: 0, bottom: 0),
+            //         )
+            //       : ElevatedButton.styleFrom(
+            //           shape: RoundedRectangleBorder(
+            //             borderRadius: BorderRadius.circular(8),
+            //           ),
+            //           backgroundColor: const Color(0xFF67D1AD),
+            //           padding: const EdgeInsets.symmetric(horizontal: 40),
+            //         ),
+            //   child: Text(
+            //     isTimerRunning ? 'Cancel' : 'Plant',
+            //     style: GoogleFonts.nunito(
+            //       color: Colors.white,
+            //       fontSize: 16,
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
